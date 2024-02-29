@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stopwatch</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+  }
+  #timer {
+    font-size: 2em;
+    margin: 20px 0;
+  }
+  button {
+    font-size: 1em;
+    padding: 10px 20px;
+    margin: 5px;
+  }
+</style>
+</head>
+<body>
+<h1>Stopwatch</h1>
+<div id="timer">00:00:00</div>
+<button id="startBtn">Start</button>
+<button id="pauseBtn" disabled>Pause</button>
+<button id="resetBtn">Reset</button>
+
+<script>
+  let timer;
+  let seconds = 0;
+  let isRunning = false;
+
+  async function startTimer() {
+    isRunning = true;
+    document.getElementById("startBtn").disabled = true;
+    document.getElementById("pauseBtn").disabled = false;
+    timer = setInterval(updateTimer, 1000);
+  }
+
+  async function pauseTimer() {
+    isRunning = false;
+    document.getElementById("startBtn").disabled = false;
+    document.getElementById("pauseBtn").disabled = true;
+    clearInterval(timer);
+  }
+
+  async function resetTimer() {
+    isRunning = false;
+    clearInterval(timer);
+    seconds = 0;
+    updateTimerDisplay();
+    document.getElementById("startBtn").disabled = false;
+    document.getElementById("pauseBtn").disabled = true;
+  }
+
+  function updateTimer() {
+    seconds++;
+    updateTimerDisplay();
+  }
+
+  function updateTimerDisplay() {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const remainingSeconds = seconds % 60;
+
+    const hoursDisplay = hours > 0 ? `${hours.toString().padStart(2, '0')}:` : '';
+    const minutesDisplay = minutes > 0 || hours > 0 ? `${minutes.toString().padStart(2, '0')}:` : '';
+    const secondsDisplay = remainingSeconds.toString().padStart(2, '0');
+
+    document.getElementById("timer").innerText = `${hoursDisplay}${minutesDisplay}${secondsDisplay}`;
+  }
+
+  document.getElementById("startBtn").addEventListener("click", startTimer);
+  document.getElementById("pauseBtn").addEventListener("click", pauseTimer);
+  document.getElementById("resetBtn").addEventListener("click", resetTimer);
+</script>
+</body>
+</html>
